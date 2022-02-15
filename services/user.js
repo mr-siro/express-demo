@@ -59,18 +59,42 @@ exports.update = async (req) => {
 };
 
 exports.getAll = async (req) => {
-  const { page, size } = req.query;
+  const { page, size, s } = req.query;
   const { limit, offset } = getPagination(page, size);
+  const condition = s
+    ? {
+        name: { [Op.substring]: s },
+        deletedAt: {
+          [Op.is]: null,
+        },
+      }
+    : {
+        deletedAt: {
+          [Op.is]: null,
+        },
+      };
   const result = await User.findAndCountAll({
-    where: {
-      deletedAt: {
-        [Op.is]: null,
-      },
-    },
+    where: condition,
     order: [["createdAt", "DESC"]],
     limit: limit,
     offset: offset,
   });
 
   return result;
+};
+
+exports.getOne = async (req) => {
+  const result = await User.findOne({
+    where: {
+      id: req.params.id,
+      deletedAt: {
+        [Op.is]: null,
+      },
+    },
+  });
+  if (req.params.id && result) {
+    return result;
+  } else {
+    return false;
+  }
 };

@@ -1,5 +1,5 @@
 const { User } = require("../models");
-const userService = require("../services/user.service");
+const userService = require("../services/user");
 const { Op } = require("sequelize");
 const { getPagination, getPagingData } = require("../utils/paginate");
 exports.create = async (req, res) => {
@@ -86,6 +86,22 @@ exports.getAll = async (req, res) => {
         },
       },
     });
+  } catch (error) {
+    return res.json({ success: false, message: "Server die" }).status(500);
+  }
+};
+
+exports.getOne = async (req, res) => {
+  try {
+    const result = await userService.getOne(req);
+    if (!result) {
+      return res
+        .json({ success: false, message: "user not exited" })
+        .status(404);
+    }
+    return res
+      .json({ success: true, message: "success", data: result })
+      .status(200);
   } catch (error) {
     return res.json({ success: false, message: "Server die" }).status(500);
   }

@@ -4,10 +4,11 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
+// routers
 const indexRouter = require("./routes/index");
-
+const usersRouter = require("./routes/user");
 const cors = require("cors");
-const db = require("./src/models");
+const db = require("./models");
 const dotenv = require("dotenv");
 // defined database
 db.sequelize.sync();
@@ -31,6 +32,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
+app.use("/users", usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "nhatnv",
+    "password": "Nhat@1234",
+    "database": "nodejs",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "nhatnv",
+    "password": "Nhat@1234",
+    "database": "nodejs",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "nhatnv",
+    "password": "Nhat@1234",
+    "database": "nodejs",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
