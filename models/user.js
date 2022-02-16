@@ -21,7 +21,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING,
       },
-
+      password: {
+        allowNull: false,
+        type: DataTypes.STRING
+      },
       status: {
         type: DataTypes.ENUM("0", "1"),
         defaultValue: "0",

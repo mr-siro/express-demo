@@ -16,7 +16,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-
+      password: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       status: {
         type: Sequelize.ENUM("0", "1"),
         defaultValue: "0",

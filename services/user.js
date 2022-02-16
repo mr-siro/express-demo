@@ -1,6 +1,8 @@
 const { User } = require("../models");
 const { Op } = require("sequelize");
 const { getPagination } = require("../utils/paginate");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 exports.create = async (req) => {
   const data = req.body;
   const checkExitUser = await User.findOne({
@@ -12,6 +14,7 @@ exports.create = async (req) => {
     const user = await User.create({
       name: data.name,
       email: data.email,
+      password: bcrypt.hashSync(req.body.password, 8),
       status: data.status,
     });
     return user;
@@ -59,11 +62,11 @@ exports.update = async (req) => {
 };
 
 exports.getAll = async (req) => {
-  const { page, size, s } = req.query;
+  const { page, size, name } = req.query;
   const { limit, offset } = getPagination(page, size);
-  const condition = s
+  const condition = name
     ? {
-        name: { [Op.substring]: s },
+        name: { [Op.substring]: name },
         deletedAt: {
           [Op.is]: null,
         },
