@@ -2,6 +2,8 @@ const { User } = require("../models");
 const userService = require("../services/user");
 const { Op } = require("sequelize");
 const { getPagination, getPagingData } = require("../utils/paginate");
+const jwt = require("jsonwebtoken");
+const config = require("../config/auth");
 exports.create = async (req, res) => {
   const checkExitUser = await User.findOne({
     where: {
@@ -10,11 +12,21 @@ exports.create = async (req, res) => {
   });
   try {
     const result = await userService.create(req);
-
+    const token = jwt.sign({ id: result.id }, config.secret, {
+      expiresIn: 86400, // 24 hours
+    });
+    const response = {
+      token: token,
+      user: result,
+    };
     if (!result) {
       if (res.status(400) && checkExitUser) {
         return res
-          .json({ success: false, message: "User exited", data: null })
+          .json({
+            success: false,
+            message: "Failed! Username is already in use!",
+            data: null,
+          })
           .status(400);
       } else {
         return res
@@ -24,7 +36,7 @@ exports.create = async (req, res) => {
     }
 
     return res
-      .json({ success: true, message: "success", data: result })
+      .json({ success: true, message: "success", data: response })
       .status(200);
   } catch (error) {
     return res.json({ success: false, message: "Server die" }).status(500);

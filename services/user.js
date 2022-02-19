@@ -17,7 +17,14 @@ exports.create = async (req) => {
       password: bcrypt.hashSync(req.body.password, 8),
       status: data.status,
     });
-    return user;
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      status: user.status,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
   } else {
     return false;
   }

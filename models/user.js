@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       password: {
         allowNull: false,
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
       },
       status: {
         type: DataTypes.ENUM("0", "1"),
@@ -45,6 +45,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "User",
+      // not select password
+      defaultScope: {
+        attributes: { exclude: ["password"] },
+      },
     }
   );
   return User;
