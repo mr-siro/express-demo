@@ -1,9 +1,9 @@
 const { User } = require("../models");
 const { Op } = require("sequelize");
 const { getPagination } = require("../utils/paginate");
-const jwt = require("jsonwebtoken");
+
 const bcrypt = require("bcryptjs");
-exports.create = async (req) => {
+exports.signup = async (req) => {
   const data = req.body;
   const checkExitUser = await User.findOne({
     where: {

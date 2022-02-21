@@ -3,15 +3,16 @@ const userService = require("../services/user");
 const { Op } = require("sequelize");
 const { getPagination, getPagingData } = require("../utils/paginate");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const config = require("../config/auth");
-exports.create = async (req, res) => {
+exports.signup = async (req, res) => {
   const checkExitUser = await User.findOne({
     where: {
       email: req.body.email,
     },
   });
   try {
-    const result = await userService.create(req);
+    const result = await userService.signup(req);
     const token = jwt.sign({ id: result.id }, config.secret, {
       expiresIn: 86400, // 24 hours
     });
@@ -113,6 +114,46 @@ exports.getOne = async (req, res) => {
     }
     return res
       .json({ success: true, message: "success", data: result })
+      .status(200);
+  } catch (error) {
+    return res.json({ success: false, message: "Server die" }).status(500);
+  }
+};
+
+exports.signin = async (req, res) => {
+  const checkExitUser = await User.findOne({
+    where: {
+      email: req.body.email,
+      deletedAt: {
+        [Op.is]: null,
+      },
+    },
+    attributes: { include: ["password"] },
+  });
+  try {
+    if (!checkExitUser) {
+      return res
+        .json({ success: false, message: "user not exited" })
+        .status(404);
+    }
+    const passwordIsValid = bcrypt.compareSync(
+      req.body.password,
+      checkExitUser.password
+    );
+    if (!passwordIsValid) {
+      return res
+        .json({
+          success: false,
+          message: "Invalid Password!",
+        })
+        .status(401);
+    }
+    const token = jwt.sign({ id: checkExitUser.id }, config.secret, {
+      expiresIn: 86400, // 24 hours
+    });
+
+    return res
+      .json({ success: true, message: "success", data: { token: token } })
       .status(200);
   } catch (error) {
     return res.json({ success: false, message: "Server die" }).status(500);
