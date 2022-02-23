@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: true,
       }),
-      queryInterface.changeColumn("FoodTypes", "deletedAt", {
+      queryInterface.addColumn("FoodTypes", "deletedAt", {
         type: Sequelize.DATE,
         allowNull: true,
       }),
