@@ -20,6 +20,7 @@ exports.signup = async (req, res) => {
       token: token,
       user: result,
     };
+
     if (!result) {
       if (res.status(400) && checkExitUser) {
         return res

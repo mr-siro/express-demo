@@ -1,13 +1,13 @@
 const express = require("express");
-const usersRouter = express.Router();
-const usersController = require("../controllers/user");
+const userRouter = express.Router();
+const userController = require("../controllers/user");
 
 const { authJwt } = require("../middlewares");
 // user
-usersRouter.get("/", [authJwt.verifyToken], usersController.getAll);
-usersRouter.get("/:id", [authJwt.verifyToken], usersController.getOne);
-usersRouter.post("/signup", usersController.signup);
-usersRouter.put("/:id", [authJwt.verifyToken], usersController.update);
-usersRouter.delete("/:id", [authJwt.verifyToken], usersController.delete);
-usersRouter.post("/signin", usersController.signin);
-module.exports = usersRouter;
+userRouter.get("/", [authJwt.verifyToken], userController.getAll);
+userRouter.get("/:id", [authJwt.verifyToken], userController.getOne);
+userRouter.post("/signup", userController.signup);
+userRouter.put("/:id", [authJwt.verifyToken], userController.update);
+userRouter.delete("/:id", [authJwt.verifyToken], userController.delete);
+userRouter.post("/signin", userController.signin);
+module.exports = userRouter;
