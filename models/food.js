@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-     Food.belongsTo(models.FoodType)
+      Food.belongsTo(models.FoodType);
     }
   }
   Food.init(
@@ -42,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Food",
+      paranoid: true,
     }
   );
   return Food;
